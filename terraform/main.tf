@@ -34,6 +34,9 @@ module "ecs" {
   log_group_name     = module.logging.log_group_name
   ecs_count          = var.ecs_count
   region             = var.aws_region
+
+  # Start the service only after the image is in ECR
+  depends_on = [docker_registry_image.app]
 }
 
 

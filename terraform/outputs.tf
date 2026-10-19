@@ -7,3 +7,8 @@ output "ecs_service_name" {
   description = "Name of the running ECS service"
   value       = module.ecs.service_name
 }
+
+output "aws_region" {
+  description = "Region the service is deployed in"
+  value       = var.aws_region
+}

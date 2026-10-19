@@ -1,0 +1,457 @@
+{
+  "info": {
+    "name": "Product API",
+    "description": "Every response code for the Product endpoints in api.yaml. Run in order: the 200 request needs the product created by the first request. The 500 requests send the header X-Simulate-Error: true.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:8080"
+    }
+  ],
+  "item": [
+    {
+      "name": "POST /products/{productId}/details",
+      "item": [
+        {
+          "name": "204 - create product",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status is 204\", () => pm.response.to.have.status(204));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/products/12345/details",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "products",
+                "12345",
+                "details"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\"product_id\":12345,\"sku\":\"ABC-123-XYZ\",\"manufacturer\":\"Acme Corporation\",\"category_id\":456,\"weight\":1250,\"some_other_id\":789}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "400 - missing required fields",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status is 400\", () => pm.response.to.have.status(400));",
+                  "pm.test(\"Body is JSON\", () => pm.response.to.be.json);"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/products/12345/details",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "products",
+                "12345",
+                "details"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\"product_id\":12345}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "400 - malformed JSON",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status is 400\", () => pm.response.to.have.status(400));",
+                  "pm.test(\"Body is JSON\", () => pm.response.to.be.json);"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/products/12345/details",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "products",
+                "12345",
+                "details"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\"product_id\":12345,",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "400 - constraint violations",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status is 400\", () => pm.response.to.have.status(400));",
+                  "pm.test(\"Body is JSON\", () => pm.response.to.be.json);"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/products/12345/details",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "products",
+                "12345",
+                "details"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\"product_id\":12345,\"sku\":\"\",\"manufacturer\":\"B\",\"category_id\":1,\"weight\":-5,\"some_other_id\":1}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "400 - path/body ID mismatch",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status is 400\", () => pm.response.to.have.status(400));",
+                  "pm.test(\"Body is JSON\", () => pm.response.to.be.json);"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/products/999/details",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "products",
+                "999",
+                "details"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\"product_id\":12345,\"sku\":\"ABC-123-XYZ\",\"manufacturer\":\"Acme Corporation\",\"category_id\":456,\"weight\":1250,\"some_other_id\":789}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "404 - invalid productId",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status is 404\", () => pm.response.to.have.status(404));",
+                  "pm.test(\"Body is JSON\", () => pm.response.to.be.json);"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/products/abc/details",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "products",
+                "abc",
+                "details"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\"product_id\":12345,\"sku\":\"ABC-123-XYZ\",\"manufacturer\":\"Acme Corporation\",\"category_id\":456,\"weight\":1250,\"some_other_id\":789}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "500 - simulated error",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status is 500\", () => pm.response.to.have.status(500));",
+                  "pm.test(\"Body is JSON\", () => pm.response.to.be.json);"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "X-Simulate-Error",
+                "value": "true"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/products/12345/details",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "products",
+                "12345",
+                "details"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\"product_id\":12345,\"sku\":\"ABC-123-XYZ\",\"manufacturer\":\"Acme Corporation\",\"category_id\":456,\"weight\":1250,\"some_other_id\":789}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "GET /products/{productId}",
+      "item": [
+        {
+          "name": "200 - existing product",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status is 200\", () => pm.response.to.have.status(200));",
+                  "pm.test(\"Body is JSON\", () => pm.response.to.be.json);"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/products/12345",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "products",
+                "12345"
+              ]
+            }
+          }
+        },
+        {
+          "name": "404 - unknown product",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status is 404\", () => pm.response.to.have.status(404));",
+                  "pm.test(\"Body is JSON\", () => pm.response.to.be.json);"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/products/99999",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "products",
+                "99999"
+              ]
+            }
+          }
+        },
+        {
+          "name": "404 - invalid productId",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status is 404\", () => pm.response.to.have.status(404));",
+                  "pm.test(\"Body is JSON\", () => pm.response.to.be.json);"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/products/abc",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "products",
+                "abc"
+              ]
+            }
+          }
+        },
+        {
+          "name": "500 - simulated error",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status is 500\", () => pm.response.to.have.status(500));",
+                  "pm.test(\"Body is JSON\", () => pm.response.to.be.json);"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "X-Simulate-Error",
+                "value": "true"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/products/12345",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "products",
+                "12345"
+              ]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

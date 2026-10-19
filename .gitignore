@@ -6,3 +6,15 @@ crash.log
 crash.*.log
 *.tfplan
 .DS_Store
+
+# Secrets and keys
+.env
+*.env
+*.pem
+*.key
+
+# Load test and log output (large / regenerated each run)
+__pycache__/
+locust/*.log
+locust/results/
+observability/logs/*.jsonl

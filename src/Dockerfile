@@ -1,20 +1,10 @@
-FROM golang:1.24-alpine  AS build
-RUN apk add --no-cache git
-
-WORKDIR /src
-COPY go.mod go.sum ./
-RUN go mod download
-
-COPY . .
-# disable cgo, target linux, static link
-RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 \
-    go build -ldflags="-s -w" -o server .
-
-FROM alpine:latest
-RUN apk add --no-cache ca-certificates
-
+# Build
+FROM golang:1.25-alpine
 WORKDIR /app
-COPY --from=build /src/server .
+COPY go.mod go.sum* ./
+COPY *.go ./
+RUN go mod tidy && go build -o product-service .
 
+# Run
 EXPOSE 8080
-ENTRYPOINT ["./server"]
+CMD ["./product-service"]
